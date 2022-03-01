@@ -2,13 +2,35 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import sha256 from 'crypto-js/sha256';
+import isEmail from 'validator/lib/isEmail';
+import { useUserContext } from '../context/user_context';
 
 const Login = () => {
   const [login, setLogin] = useState(true);
-  const navigate = useNavigate();
+  const [isValidEmail, setIsValidEmail] = useState('');
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const { userLogin, errorLogin } = useUserContext();
 
+  const navigate = useNavigate();
   const landingPage = () => {
     navigate('/');
+  };
+
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    const { email, password } = credentials;
+    if (email && password) {
+      if (!isEmail(email)) {
+        setIsValidEmail('Please enter a valid email');
+        setTimeout(() => {
+          setIsValidEmail('');
+        }, 2500);
+      } else {
+        const shaPassword = sha256(password).toString();
+        userLogin(email, shaPassword);
+      }
+    }
   };
 
   return (
@@ -19,15 +41,32 @@ const Login = () => {
             <div className="close-btn">
               <MdClose size={30} onClick={landingPage} />
             </div>
-            <form onSubmit={(e) => e.preventDefault()}>
+            <form onSubmit={handleSignIn}>
               <h1>Sign in</h1>
+              {errorLogin && <h2>Incorrect username/password .. </h2>}
               <div className="form-group">
-                <label htmlFor="user">Email</label>
-                <input type="text" name="user" />
+                <label htmlFor="user">
+                  Email <span className="span-email">{isValidEmail}</span>
+                </label>
+                <input
+                  type="text"
+                  name="user"
+                  value={credentials.email}
+                  onChange={(e) =>
+                    setCredentials({ ...credentials, email: e.target.value })
+                  }
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="password">Password</label>
-                <input type="password" name="password" />
+                <input
+                  type="password"
+                  name="password"
+                  value={credentials.password}
+                  onChange={(e) =>
+                    setCredentials({ ...credentials, password: e.target.value })
+                  }
+                />
               </div>
               <button type="submit">Sign In</button>
             </form>
@@ -137,6 +176,11 @@ const Wrapper = styled.section`
       border-radius: 50%;
       background: #fff;
     }
+  }
+
+  .span-email {
+    color: red;
+    font-weight: bold;
   }
 
   .close-btn {

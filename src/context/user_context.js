@@ -4,8 +4,14 @@ import axios from 'axios';
 const UserContext = React.createContext();
 const URL = process.env.REACT_APP_BACKEND;
 
+const getSessionStorage = () => {
+  return sessionStorage.getItem('user')
+    ? JSON.parse(sessionStorage.getItem('user'))
+    : null;
+};
+
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(getSessionStorage());
   const [errorLogin, setErrorLogin] = useState(false);
 
   const userLogin = async (email, password) => {
@@ -20,6 +26,10 @@ export const UserProvider = ({ children }) => {
       .then((resp) => {
         const { accessToken, customer } = resp.data;
         setUser({ accessToken, ...customer });
+        sessionStorage.setItem(
+          'user',
+          JSON.stringify({ accessToken, ...customer })
+        );
       })
       .catch((e) => {
         setUser(null);

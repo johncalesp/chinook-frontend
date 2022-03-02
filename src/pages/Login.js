@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { MdClose } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -10,12 +10,18 @@ const Login = () => {
   const [login, setLogin] = useState(true);
   const [isValidEmail, setIsValidEmail] = useState('');
   const [credentials, setCredentials] = useState({ email: '', password: '' });
-  const { userLogin, errorLogin } = useUserContext();
+  const { user, userLogin, errorLogin } = useUserContext();
 
   const navigate = useNavigate();
   const landingPage = () => {
     navigate('/');
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate('/main');
+    }
+  });
 
   const handleSignIn = (e) => {
     e.preventDefault();

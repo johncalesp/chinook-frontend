@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Landing, Error, Login, MainMenu } from './pages';
+import { Landing, Error, Login, MainMenu, InvoiceDetails } from './pages';
 import { PrivateRoute } from './components';
 
 function App() {
@@ -13,6 +13,14 @@ function App() {
           element={
             <PrivateRoute>
               <MainMenu />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/invoice/:id"
+          element={
+            <PrivateRoute>
+              <InvoiceDetails />
             </PrivateRoute>
           }
         />

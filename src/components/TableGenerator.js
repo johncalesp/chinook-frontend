@@ -1,35 +1,66 @@
 import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { useDemoData } from '@mui/x-data-grid-generator';
 import axios from 'axios';
 
 const PAGE_SIZE = 10;
 
-const TableGenerator = ({ accessToken, customerId }) => {
-  console.log(accessToken, customerId);
+const TableGenerator = ({ accessToken, identifier, endpoint, columns }) => {
+  console.log(accessToken, identifier);
   //   const { data } = useDemoData({
   //     dataSet: 'Commodity',
   //     rowLength: 100,
   //     maxColumns: 6,
   //   });
 
-  const pagesNextCursor = React.useRef({});
+  // let totalNumPages = 1;
+  // let totalNumItems = 1;
+
+  const [totalNumPages, setTotalNumPages] = React.useState(1);
+  const [totalNumItems, setTotalNumItems] = React.useState(1);
 
   const [rows, setRows] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
 
-  const loadServerRows = async (customerId, pageNum, accessToken) => {
+  const loadServerRows = async (identifier, pageNum, accessToken, endpoint) => {
     const url =
       process.env.REACT_APP_BACKEND +
-      `/api/invoice_customer/${customerId}/${Number(pageNum) + 1}`;
+      `/api/${endpoint}/${identifier}/${Number(pageNum) + 1}`;
     console.log(url);
 
     await axios
       .get(url, { headers: { Authorization: `Bearer ${accessToken}` } })
       .then((resp) => {
-        setRows(resp.data.invoices);
-        console.log(rows);
+        if (endpoint === 'invoice_customer') {
+          setRows(
+            resp.data.data.map((item) => {
+              const id = item.InvoiceId;
+              const parsedDate = new Date(item.InvoiceDate).toDateString();
+              return {
+                ...item,
+                InvoiceDate: parsedDate,
+                id,
+              };
+            })
+          );
+        } else if (
+          endpoint === 'tracks_not_owned' ||
+          endpoint === 'tracks_by_customers' ||
+          endpoint === 'tracks_by_invoice'
+        ) {
+          setRows(
+            resp.data.data.map((item) => {
+              const id = item.TrackId;
+              return {
+                ...item,
+                id,
+              };
+            })
+          );
+        }
+        setLoading(false);
+        setTotalNumPages(resp.data.pages);
+        setTotalNumItems(resp.data.totalItems);
       })
       .catch((e) => console.log(e));
   };
@@ -40,12 +71,13 @@ const TableGenerator = ({ accessToken, customerId }) => {
     // if (newPage === 0 || pagesNextCursor.current[newPage - 1]) {
     //   setPage(newPage);
     // }
-    if (newPage >= 0 && newPage <= 20) setPage(newPage);
+    if (newPage >= 0 && newPage <= totalNumPages) setPage(newPage);
     // console.log(page);
   };
 
   React.useEffect(() => {
-    loadServerRows(customerId, 0, accessToken);
+    setLoading(true);
+    loadServerRows(identifier, page, accessToken, endpoint);
 
     // let active = true;
 
@@ -74,23 +106,23 @@ const TableGenerator = ({ accessToken, customerId }) => {
     // return () => {
     //   active = false;
     // };
-  }, [page]);
+  }, [identifier, page, accessToken, endpoint]);
 
   return (
     <div style={{ height: 400, width: '100%' }}>
-      {/* <DataGrid
+      <DataGrid
         rows={rows}
-        columns={data.columns}
+        columns={columns}
         pagination
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        rowCount={100}
+        pageSize={PAGE_SIZE}
+        rowsPerPageOptions={[PAGE_SIZE]}
+        rowCount={totalNumItems}
         paginationMode="server"
         onPageChange={handlePageChange}
         page={page}
         loading={loading}
-      /> */}
-      LOADED
+        disableSelectionOnClick
+      />
     </div>
   );
 };

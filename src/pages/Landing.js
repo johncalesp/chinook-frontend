@@ -1,25 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Loading } from '../components';
 
 const Landing = () => {
+  const [loading, setLoading] = useState(true);
+
+  const spinUpBackend = async () => {
+    const url = `${process.env.REACT_APP_BACKEND}/api/test`;
+    await axios
+      .get(url)
+      .then((resp) => {
+        console.log(resp);
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+  useEffect(() => {
+    setLoading(true);
+    spinUpBackend();
+  }, []);
   return (
-    <Wrapper>
-      <main className="landing">
-        <section className="text">
-          <h1>Chinook DB</h1>
-          <p>
-            This is a website designed to connect to Chinook DB which contains
-            different tables about users,tracks, albumns, artists and invoices.
-          </p>
-          <div className="login-buttons">
-            <Link to="/login">
-              <button className="btn">Login</button>
-            </Link>
-          </div>
-        </section>
-      </main>
-    </Wrapper>
+    <>
+      {loading ? (
+        <Loading />
+      ) : (
+        <Wrapper>
+          <main className="landing">
+            <section className="text">
+              <h1>Chinook DB</h1>
+              <p>
+                This is a website designed to connect to Chinook DB which
+                contains different tables about users,tracks, albumns, artists
+                and invoices.
+              </p>
+              <div className="login-buttons">
+                <Link to="/login">
+                  <button className="btn">Login</button>
+                </Link>
+              </div>
+            </section>
+          </main>
+        </Wrapper>
+      )}
+    </>
   );
 };
 

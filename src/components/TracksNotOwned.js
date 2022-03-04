@@ -2,15 +2,6 @@ import React from 'react';
 import TableGenerator from './TableGenerator';
 
 const TracksNotOwned = ({ accessToken, identifier }) => {
-  // "Album": "For Those About To Rock We Salute You",
-  //         "Artist": "AC/DC",
-  //         "Composer": "Angus Young, Malcolm Young, Brian Johnson",
-  //         "Duration": 5.73,
-  //         "Genre": "Rock",
-  //         "MediaType": "MPEG audio file",
-  //         "Name": "For Those About To Rock (We Salute You)",
-  //         "TrackId": 1,
-  //         "UnitPrice": "0.99"
   const endpoint = 'tracks_not_owned';
   const columns = [
     { field: 'Name', headerName: 'Name', minWidth: 150 },

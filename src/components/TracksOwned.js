@@ -2,15 +2,6 @@ import React from 'react';
 import TableGenerator from './TableGenerator';
 
 const TracksOwned = ({ accessToken, identifier }) => {
-  // "Album": "Afrociberdelia",
-  //         "Artist": "Chico Science & Nação Zumbi",
-  //         "Composer": "Chico Science",
-  //         "Duration": 1.19,
-  //         "Genre": "Latin",
-  //         "MediaType": "MPEG audio file",
-  //         "Name": "Interlude Zumbi",
-  //         "TrackId": 262,
-  //         "UnitPrice": "0.99"
   const endpoint = 'tracks_by_customers';
   const columns = [
     { field: 'Name', headerName: 'Name', minWidth: 150 },

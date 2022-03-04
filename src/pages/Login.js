@@ -9,7 +9,10 @@ import { useUserContext } from '../context/user_context';
 const Login = () => {
   const [login, setLogin] = useState(true);
   const [isValidEmail, setIsValidEmail] = useState('');
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const [credentials, setCredentials] = useState({
+    email: 'leonekohler@surfeu.de',
+    password: 'password',
+  });
   const { user, userLogin, errorLogin } = useUserContext();
 
   const navigate = useNavigate();
@@ -49,7 +52,11 @@ const Login = () => {
             </div>
             <form onSubmit={handleSignIn}>
               <h1>Sign in</h1>
-              {errorLogin && <h2>Incorrect username/password .. </h2>}
+              {errorLogin && (
+                <h4 style={{ color: '#D75134' }}>
+                  Incorrect username/password ..{' '}
+                </h4>
+              )}
               <div className="form-group">
                 <label htmlFor="user">
                   Email <span className="span-email">{isValidEmail}</span>
@@ -76,12 +83,25 @@ const Login = () => {
               </div>
               <button type="submit">Sign In</button>
             </form>
+            <div className="other-users">
+              <div>
+                <h4>Other users:</h4>
+                <p>
+                  ftremblay@gmail.com <strong>password</strong>
+                </p>
+                <p>
+                  bjorn.hansen@yahoo.no <strong>password</strong>
+                </p>
+              </div>
+            </div>
+            {/* 
+              UNCOMMENT FOR FUTURE DEVELOPMENT
             <div className="wrap">
               <div className="line">
                 <div className="line-text">Or</div>
               </div>
             </div>
-            <button onClick={() => setLogin(!login)}>Sign Up</button>
+            <button onClick={() => setLogin(!login)}>Sign Up</button> */}
           </div>
         </div>
       ) : (
@@ -209,6 +229,10 @@ const Wrapper = styled.section`
       border: #ddd 1px solid;
       border-radius: 5px;
     }
+  }
+  .other-users {
+    padding: 0.25rem;
+    margin-top: 0.5rem;
   }
 `;
 

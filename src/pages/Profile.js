@@ -3,11 +3,15 @@ import { useUserContext } from '../context/user_context';
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import { Loading } from '../components';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 const Profile = () => {
   const { user, updateUser } = useUserContext();
   const [person, setPerson] = useState(user);
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -18,6 +22,10 @@ const Profile = () => {
     e.preventDefault();
     updateUser(person);
     setLoading(false);
+    setSuccess(true);
+    setTimeout(() => {
+      setSuccess(false);
+    }, 2000);
   };
   return (
     <>
@@ -26,6 +34,12 @@ const Profile = () => {
           <Loading />
         ) : (
           <div className="container">
+            {success && (
+              <Alert severity="success">
+                <AlertTitle>Success</AlertTitle>
+                <strong>User updated</strong>
+              </Alert>
+            )}
             <form onSubmit={handleSubmit}>
               <div className="form-grid">
                 <div className="form-item">

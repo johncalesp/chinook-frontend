@@ -1,6 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Landing, Error, Login, MainMenu, InvoiceDetails } from './pages';
-import { PrivateRoute } from './components';
+import {
+  Landing,
+  Error,
+  Login,
+  InvoiceDetails,
+  Profile,
+  PageInvoices,
+  UserTracks,
+  NewTracks,
+} from './pages';
+import { PrivateRoute, NavBar } from './components';
 
 function App() {
   return (
@@ -12,18 +21,51 @@ function App() {
           path="/main"
           element={
             <PrivateRoute>
-              <MainMenu />
+              <NavBar />
             </PrivateRoute>
           }
-        />
-        <Route
-          path="/invoice/:id"
-          element={
-            <PrivateRoute>
-              <InvoiceDetails />
-            </PrivateRoute>
-          }
-        />
+        >
+          <Route
+            path="profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="invoices"
+            element={
+              <PrivateRoute>
+                <PageInvoices />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="invoice/:id"
+            element={
+              <PrivateRoute>
+                <InvoiceDetails />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="usertracks"
+            element={
+              <PrivateRoute>
+                <UserTracks />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="newtracks"
+            element={
+              <PrivateRoute>
+                <NewTracks />
+              </PrivateRoute>
+            }
+          />
+        </Route>
         <Route path="*" element={<Error />} />
       </Routes>
     </Router>

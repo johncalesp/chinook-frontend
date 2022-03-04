@@ -5,6 +5,7 @@ import TracksNotOwned from './TracksNotOwned';
 import TracksOwned from './TracksOwned';
 import InvoiceSongs from './InvoiceSongs';
 import NavBar from './NavBar';
+import Loading from './Loading';
 
 export {
   PrivateRoute,
@@ -14,4 +15,5 @@ export {
   TracksOwned,
   InvoiceSongs,
   NavBar,
+  Loading,
 };

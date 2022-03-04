@@ -109,8 +109,9 @@ const TableGenerator = ({ accessToken, identifier, endpoint, columns }) => {
   }, [identifier, page, accessToken, endpoint]);
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div style={{ width: '100%', marginTop: '2rem' }}>
       <DataGrid
+        autoHeight
         rows={rows}
         columns={columns}
         pagination

@@ -18,21 +18,21 @@ const Invoices = ({ accessToken, identifier }) => {
     { field: 'InvoiceDate', headerName: 'Invoice Date', minWidth: 150 },
     { field: 'BillingAddress', headerName: 'Billing Address', minWidth: 150 },
     { field: 'BillingCity', headerName: 'Billing City', minWidth: 150 },
-    { field: 'BillingCountry', headerName: 'Billing Country', minWidth: 150 },
+    { field: 'BillingCountry', headerName: 'Billing Country', minWidth: 120 },
     {
       field: 'BillingPostalCode',
       headerName: 'Billing Postal Code',
       minWidth: 150,
     },
-    { field: 'BillingState', headerName: 'Billing State', minWidth: 150 },
-    { field: 'Total', headerName: 'Total (USD)', minWidth: 100 },
+    { field: 'BillingState', headerName: 'Billing State', minWidth: 100 },
+    { field: 'Total', headerName: 'Total (USD)', minWidth: 80, type: 'number' },
     {
       field: 'InvoiceId',
       headerName: 'Details',
-      width: 100,
+      width: 150,
       renderCell: (params) => (
         <strong>
-          <Link to={`/invoice/${params.value}`} className="btn">
+          <Link to={`/main/invoice/${params.value}`} className="btn">
             View Songs
           </Link>
           {/* <Button

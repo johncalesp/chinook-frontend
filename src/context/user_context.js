@@ -36,8 +36,48 @@ export const UserProvider = ({ children }) => {
         setErrorLogin(true);
       });
   };
+
+  const updateUser = async (person) => {
+    const { firstName, lastName, company, phone, address, city } = person;
+    await axios({
+      method: 'post',
+      url: `${URL}/api/update_user`,
+      headers: { Authorization: `Bearer ${user.accessToken}` },
+      data: {
+        id: user.customerId,
+        firstName,
+        lastName,
+        company,
+        phone,
+        address,
+        city,
+      },
+    })
+      .then((resp) => {
+        const { firstName, lastName, company, phone, address, city } =
+          resp.data.customer;
+        setUser({
+          ...user,
+          firstName,
+          lastName,
+          company,
+          phone,
+          address,
+          city,
+        });
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const userLogout = () => {
+    setUser(null);
+    sessionStorage.clear();
+  };
+
   return (
-    <UserContext.Provider value={{ user, userLogin, errorLogin }}>
+    <UserContext.Provider
+      value={{ user, userLogin, errorLogin, userLogout, updateUser }}
+    >
       {children}
     </UserContext.Provider>
   );
